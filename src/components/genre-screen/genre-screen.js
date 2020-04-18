@@ -1,63 +1,97 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const GenreScreen = (props) => {
+class GenreScreen extends React.Component {
 
-	const {quest, onAnswer} = props;
+	constructor (props) {
+		super(props);
 
-	return (
-		<section className="game game--genre">
-			<header className="game__header">
-				<a className="game__back">
-					<span className="visually-hidden">Сыграть ещё раз</span>
-					<img className="game__logo" src="img/melody-logo-ginger.png" alt="Угадай мелодию"/>
-				</a>
+		this.state = {
+			checked: [],
+			disabled: true
+		}
+	}
 
-				{/*<svg xmlns="http://www.w3.org/2000/svg" className="timer" viewBox="0 0 780 780">*/}
+	handleChange = (e) => {
+
+		const checkedArr = this.state.checked;
+		const id = e.target.id.slice(`answer-`.length);
+
+		if (checkedArr.indexOf(id) < 0) {
+
+			checkedArr.push(id);
+
+		} else {
+
+			checkedArr.splice(checkedArr.indexOf(id), 1);
+		}
+
+		this.setState((prevState) => ({
+			checked: checkedArr,
+			disabled: !checkedArr.length
+		}));
+	};
+
+	render () {
+		const {quest, onAnswer} = this.props;
+
+		return (
+			<section className="game game--genre">
+				<header className="game__header">
+					<a className="game__back">
+						<span className="visually-hidden">Сыграть ещё раз</span>
+						<img className="game__logo" src="img/melody-logo-ginger.png" alt="Угадай мелодию"/>
+					</a>
+
+					{/*<svg xmlns="http://www.w3.org/2000/svg" className="timer" viewBox="0 0 780 780">*/}
 					{/*<circle className="timer__line" cx="390" cy="390" r="370"*/}
-									{/*style="filter: url(#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"/>*/}
-				{/*</svg>*/}
+					{/*style="filter: url(#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"/>*/}
+					{/*</svg>*/}
 
-				<div className="timer__value" xmlns="http://www.w3.org/1999/xhtml">
-					<span className="timer__mins">05</span>
-					<span className="timer__dots">:</span>
-					<span className="timer__secs">00</span>
-				</div>
+					<div className="timer__value" xmlns="http://www.w3.org/1999/xhtml">
+						<span className="timer__mins">05</span>
+						<span className="timer__dots">:</span>
+						<span className="timer__secs">00</span>
+					</div>
 
-				<div className="game__mistakes">
-					<div className="wrong"></div>
-					<div className="wrong"></div>
-					<div className="wrong"></div>
-				</div>
-			</header>
+					<div className="game__mistakes">
+						<div className="wrong"></div>
+						<div className="wrong"></div>
+						<div className="wrong"></div>
+					</div>
+				</header>
 
-			<section className="game__screen">
-				<h2 className="game__title">{quest.title}</h2>
+				<section className="game__screen">
+					<h2 className="game__title">{quest.title}</h2>
 
-				<form className="game__tracks" onSubmit={onAnswer}>
+					<form className="game__tracks" onSubmit={() => onAnswer(this.state.checked)}>
 
-					{quest.options.map((item, index) => {
+						{quest.options.map((item, ind) => {
 
-						return (
-							<div className="track" key={`track-${item.id}`}>
-								<button className="track__button track__button--play" type="button"/>
-								<div className="track__status">
-									<audio/>
+							return (
+								<div className="track" key={`track-${item.id}`}>
+									<button className="track__button track__button--play" type="button"/>
+									<div className="track__status">
+										<audio/>
+									</div>
+									<div className="game__answer">
+										<input className="game__input visually-hidden" type="checkbox" name={`answer-${item.id}`}
+													 value={ind}
+													 onChange={this.handleChange} id={`answer-${item.id}`}/>
+										<label className="game__check" htmlFor={`answer-${item.id}`}>Отметить</label>
+									</div>
 								</div>
-								<div className="game__answer">
-									<input className="game__input visually-hidden" type="checkbox" name="answer" value={`answer-${index}`} id={`answer-${index}`} />
-									<label className="game__check" htmlFor={`answer-${index}`}>Отметить</label>
-								</div>
-							</div>
-						);
-					})}
+							);
+						})}
 
-					<button className="game__submit button" type="submit">Ответить</button>
-				</form>
+						<button className="game__submit button" type="submit"
+										disabled={this.state.disabled}>Ответить</button>
+					</form>
+				</section>
 			</section>
-		</section>
-	);
-};
+		);
+	}
+}
 
 GenreScreen.propTypes = {
 	quest: PropTypes.object.isRequired,
