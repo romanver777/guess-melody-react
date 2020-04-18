@@ -2,6 +2,7 @@ import React from 'react';
 import WellcomeScreen from '../wellcome-screen/wellcome-screen.jsx';
 import ArtistScreen from '../artist-screen/artist-screen';
 import GenreScreen from '../genre-screen/genre-screen';
+import PropTypes from 'prop-types';
 
 class App extends React.PureComponent {
 
@@ -38,7 +39,8 @@ class App extends React.PureComponent {
 		super(props);
 
 		this.state = {
-			currentQuest: -1
+			currentQuest: -1,
+			answers: []
 		};
 	}
 
@@ -47,19 +49,31 @@ class App extends React.PureComponent {
 		const {quests} = this.props;
 		const {currentQuest} = this.state;
 
-		return App.getLevel(currentQuest, this.props, () => {
+		return App.getLevel(currentQuest, this.props, (e) => {
+
+			const id = e.target ? e.target.id.slice('answer-'.length) : e;
+			const answerArr = this.state.answers;
+
+			if (id) answerArr.push(id);
+
 			this.setState((prevState) => {
 
 				const nextIndex = prevState.currentQuest + 1;
 				const isEnd = nextIndex > quests.length - 1;
 
 				return {
-					...prevState,
 					currentQuest: !isEnd ? nextIndex : -1,
+					answers: answerArr
 				};
 			});
 		});
 	}
 }
+
+App.propTypes = {
+	time: PropTypes.number.isRequired,
+	mistakes: PropTypes.number.isRequired,
+	quests: PropTypes.array.isRequired
+};
 
 export default App;
