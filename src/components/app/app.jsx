@@ -40,8 +40,8 @@ class App extends React.PureComponent {
 
 		this.state = {
 			currentQuest: -1,
-			answers: []
-		};
+			answers: [],
+		}
 	}
 
 	render() {
