@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import AudioPlayer from '../audio-player/audio-player';
 
 class GenreScreen extends React.Component {
 
@@ -8,9 +9,35 @@ class GenreScreen extends React.Component {
 
 		this.state = {
 			checked: [],
-			disabled: true
+			disabled: true,
+			currentPlayer: null,
 		}
 	}
+
+	handleClick = (item) => {
+
+		if (this.state.currentPlayer) {
+
+			if (this.state.currentPlayer == item) {
+
+				this.state.currentPlayer.pause();
+
+				this.setState((prevState) => ({
+					// isPaused: !prevState.isPaused
+					currentPlayer: null
+				}));
+
+				return;
+			}
+
+			this.state.currentPlayer.pause();
+		}
+
+		item.play();
+		this.setState((prevState) => ({
+			currentPlayer: item
+		}));
+	};
 
 	handleChange = (e) => {
 
@@ -70,10 +97,9 @@ class GenreScreen extends React.Component {
 
 							return (
 								<div className="track" key={`track-${item.id}`}>
-									<button className="track__button track__button--play" type="button"/>
-									<div className="track__status">
-										<audio/>
-									</div>
+
+									<AudioPlayer src={item.src} onClick={this.handleClick}/>
+
 									<div className="game__answer">
 										<input className="game__input visually-hidden" type="checkbox" name={`answer-${item.id}`}
 													 value={ind}
