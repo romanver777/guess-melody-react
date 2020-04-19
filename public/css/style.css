@@ -810,20 +810,26 @@ img {
   text-align: center;
   cursor: pointer; }
 
-.artist__picture {
-  margin-bottom: 5px;
+.artist__picture-wrap{
   width: 134px;
   height: 134px;
   background-color: #f0eed5;
   border: solid 5px #230d1a;
   border-radius: 134px;
-  cursor: pointer; }
+  cursor: pointer;
+  overflow: hidden; }
 
-.artist:hover .artist__picture,
-.artist__input:focus + .artist__name .artist__picture {
+.artist__picture {
+  margin-bottom: 5px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; }
+
+.artist:hover .artist__picture-wrap,
+.artist__input:focus + .artist__name .artist__picture-wrap {
   border-color: #ff9749; }
 
-.artist:active .artist__picture {
+.artist:active .artist__picture-wrap {
   border-color: #f00000; }
 
 .artist__text {
