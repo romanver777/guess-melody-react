@@ -1,68 +1,104 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import AudioPlayer from '../audio-player/audio-player';
 
-const ArtistScreen = (props) => {
+class ArtistScreen extends React.PureComponent {
 
-	const {quest, onAnswer} = props;
+	constructor (props) {
+		super(props);
 
-	return (
-		<section className="game game--artist">
-			<header className="game__header">
-				<a className="game__back">
-					<span className="visually-hidden">Сыграть ещё раз</span>
-					<img className="game__logo" src="img/melody-logo-ginger.png" alt="Угадай мелодию"/>
-				</a>
+		this.state = {
+			currentPlayer: null,
+		}
+	}
 
-				{/*<svg xmlns="http://www.w3.org/2000/svg" className="timer" viewBox="0 0 780 780">*/}
+	handleClick = (item) => {
+
+		if (this.state.currentPlayer) {
+
+			if (this.state.currentPlayer == item) {
+
+				this.state.currentPlayer.pause();
+
+				this.setState((prevState) => ({
+					// isPaused: !prevState.isPaused
+					currentPlayer: null
+				}));
+
+				return;
+			}
+
+			this.state.currentPlayer.pause();
+		}
+
+		item.play();
+		this.setState((prevState) => ({
+			currentPlayer: item
+		}));
+
+	};
+
+	render () {
+		const {quest, onAnswer} = this.props;
+		const src = quest.options[quest.answer.id].src;
+
+		return (
+			<section className="game game--artist">
+				<header className="game__header">
+					<a className="game__back">
+						<span className="visually-hidden">Сыграть ещё раз</span>
+						<img className="game__logo" src="img/melody-logo-ginger.png" alt="Угадай мелодию"/>
+					</a>
+
+					{/*<svg xmlns="http://www.w3.org/2000/svg" className="timer" viewBox="0 0 780 780">*/}
 					{/*<circle className="timer__line" cx="390" cy="390" r="370" style="filter: url(#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center" />*/}
-				{/*</svg>*/}
+					{/*</svg>*/}
 
-				<div className="timer__value" xmlns="http://www.w3.org/1999/xhtml">
-					<span className="timer__mins">05</span>
-					<span className="timer__dots">:</span>
-					<span className="timer__secs">00</span>
-				</div>
-
-				<div className="game__mistakes">
-					<div className="wrong"></div>
-					<div className="wrong"></div>
-					<div className="wrong"></div>
-				</div>
-			</header>
-
-			<section className="game__screen">
-				<h2 className="game__title">{quest.title}</h2>
-				<div className="game__track">
-					<div className="track">
-						<button className="track__button track__button--play" type="button"/>
-						<div className="track__status">
-							<audio/>
-						</div>
+					<div className="timer__value" xmlns="http://www.w3.org/1999/xhtml">
+						<span className="timer__mins">05</span>
+						<span className="timer__dots">:</span>
+						<span className="timer__secs">00</span>
 					</div>
-				</div>
 
-				<form className="game__artist" onChange={onAnswer}>
+					<div className="game__mistakes">
+						<div className="wrong"></div>
+						<div className="wrong"></div>
+						<div className="wrong"></div>
+					</div>
+				</header>
 
-					{quest.options.map((item) => {
+				<section className="game__screen">
+					<h2 className="game__title">{quest.title}</h2>
+					<div className="game__track">
 
-						return (
-							<div className="artist" key={`artist-${item.id}`}>
-								<input className="artist__input visually-hidden" type="radio" name="answer" value={`artist-${item.id}`} id={`answer-${item.id}`}/>
-								<label className="artist__name" htmlFor={`answer-${item.id}`}>
-									<div className="artist__picture-wrap">
-										<img className="artist__picture" src={item.imgSrc} alt={item.title}/>
-									</div>
-									{item.title}
-								</label>
-							</div>
-						)
-					})}
+						<AudioPlayer src={src} onClick={this.handleClick}/>
 
-				</form>
+					</div>
+
+					<form className="game__artist" onChange={onAnswer}>
+
+						{quest.options.map((item) => {
+
+							return (
+								<div className="artist" key={`artist-${item.id}`}>
+									<input className="artist__input visually-hidden" type="radio" name="answer"
+												 value={`artist-${item.id}`} id={`answer-${item.id}`}/>
+									<label className="artist__name" htmlFor={`answer-${item.id}`}>
+										<div className="artist__picture-wrap">
+											<img className="artist__picture" src={item.imgSrc} alt={item.title}/>
+										</div>
+										{item.title}
+									</label>
+								</div>
+							)
+						})}
+
+					</form>
+				</section>
 			</section>
-		</section>
-	)
-};
+		)
+	}
+}
 
 ArtistScreen.propTypes = {
 	quest: PropTypes.object.isRequired,
