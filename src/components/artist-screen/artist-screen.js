@@ -9,38 +9,44 @@ class ArtistScreen extends React.PureComponent {
 
 		this.state = {
 			currentPlayer: null,
+			currentButton: null,
 		}
 	}
 
-	handleClick = (item) => {
+	handleClick = (items) => {
+
+		const classNamePlay = `track__button track__button--pause`;
+		const classNamePause = `track__button track__button--play`;
 
 		if (this.state.currentPlayer) {
 
-			if (this.state.currentPlayer == item) {
+			this.state.currentPlayer.pause();
+			this.state.currentButton.className = classNamePause;
 
-				this.state.currentPlayer.pause();
+			if (this.state.currentPlayer === items[0]) {
 
-				this.setState((prevState) => ({
-					// isPaused: !prevState.isPaused
-					currentPlayer: null
-				}));
+				this.setState({
+					currentPlayer: null,
+					currentButton: null,
+				});
 
 				return;
 			}
-
-			this.state.currentPlayer.pause();
 		}
 
-		item.play();
-		this.setState((prevState) => ({
-			currentPlayer: item
-		}));
+		items[0].play();
+		items[1].className = classNamePlay;
 
+		this.setState({
+			currentPlayer: items[0],
+			currentButton: items[1],
+		});
 	};
 
 	render () {
 		const {quest, onAnswer} = this.props;
 		const src = quest.options[quest.answer.id].src;
+		const id = quest.options[quest.answer.id].id;
 
 		return (
 			<section className="game game--artist">
@@ -71,7 +77,8 @@ class ArtistScreen extends React.PureComponent {
 					<h2 className="game__title">{quest.title}</h2>
 					<div className="game__track">
 
-						<AudioPlayer src={src} onClick={this.handleClick}/>
+						<AudioPlayer src={src}
+												 onClick={this.handleClick}/>
 
 					</div>
 
