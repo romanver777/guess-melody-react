@@ -11,32 +11,38 @@ class GenreScreen extends React.Component {
 			checked: [],
 			disabled: true,
 			currentPlayer: null,
+			currentButton: null,
 		}
 	}
 
-	handleClick = (item) => {
+	handleClick = (items) => {
+
+		const classNamePlay = `track__button track__button--pause`;
+		const classNamePause = `track__button track__button--play`;
 
 		if (this.state.currentPlayer) {
 
-			if (this.state.currentPlayer == item) {
+			this.state.currentPlayer.pause();
+			this.state.currentButton.className = classNamePause;
 
-				this.state.currentPlayer.pause();
+			if (this.state.currentPlayer === items[0]) {
 
-				this.setState((prevState) => ({
-					// isPaused: !prevState.isPaused
-					currentPlayer: null
-				}));
+				this.setState({
+					currentPlayer: null,
+					currentButton: null,
+				});
 
 				return;
 			}
-
-			this.state.currentPlayer.pause();
 		}
 
-		item.play();
-		this.setState((prevState) => ({
-			currentPlayer: item
-		}));
+		items[0].play();
+		items[1].className = classNamePlay;
+
+		this.setState({
+			currentPlayer: items[0],
+			currentButton: items[1],
+		});
 	};
 
 	handleChange = (e) => {
@@ -98,7 +104,8 @@ class GenreScreen extends React.Component {
 							return (
 								<div className="track" key={`track-${item.id}`}>
 
-									<AudioPlayer src={item.src} onClick={this.handleClick}/>
+									<AudioPlayer src={item.src}
+															 onClick={this.handleClick}/>
 
 									<div className="game__answer">
 										<input className="game__input visually-hidden" type="checkbox" name={`answer-${item.id}`}

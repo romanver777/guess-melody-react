@@ -7,9 +7,7 @@ class AudioPlayer extends React.PureComponent {
 		super(props);
 
 		this.audio = React.createRef();
-		this.state = {
-			isPaused: true,
-		}
+		this.button = React.createRef();
 	}
 
 	render () {
@@ -18,9 +16,10 @@ class AudioPlayer extends React.PureComponent {
 
 		return (
 				<div className="track">
-					<button className={`track__button ${this.state.isPaused ? `track__button--play` : `track__button--pause`}`}
+					<button className="track__button track__button--play"
 									type="button"
-									onClick={() => onClick(this.audio.current)}/>
+									ref={this.button}
+									onClick={() => onClick([this.audio.current, this.button.current])}/>
 					<div className="track__status">
 						<audio src={src}
 										ref={this.audio}/>
@@ -32,7 +31,7 @@ class AudioPlayer extends React.PureComponent {
 
 AudioPlayer.propTypes = {
 	src: PropTypes.string.isRequired,
-	// isPause: PropTypes.bool.isRequired
+	onClick: PropTypes.func.isRequired
 };
 
 export default AudioPlayer;

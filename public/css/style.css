@@ -538,7 +538,8 @@ img {
   background: transparent;
   border-color: transparent;
   border-left-color: #ff9749;
-  border-width: 70px 0 70px 100px; }
+  border-width: 70px 0 70px 100px;
+  outline: none;}
   .welcome__button:hover {
     -webkit-transform: scale(1.05);
             transform: scale(1.05); }
@@ -777,7 +778,8 @@ img {
   border: none;
   background-color: transparent;
   background-image: url("../img/sprite.png");
-  cursor: pointer; }
+  cursor: pointer;
+  outline: none;}
   .track__button--play {
     background-position: -5px -241px; }
   .track__button--pause {
