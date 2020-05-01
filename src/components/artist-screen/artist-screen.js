@@ -21,7 +21,12 @@ class ArtistScreen extends React.PureComponent {
 		if (this.state.currentPlayer) {
 
 			this.state.currentPlayer.pause();
-			this.state.currentButton.className = classNamePause;
+
+			this.setState((prevState) => ({
+
+					currentButton: prevState.currentButton.className = classNamePause,
+				})
+			);
 
 			if (this.state.currentPlayer === items[0]) {
 
@@ -57,7 +62,8 @@ class ArtistScreen extends React.PureComponent {
 					</a>
 
 					{/*<svg xmlns="http://www.w3.org/2000/svg" className="timer" viewBox="0 0 780 780">*/}
-					{/*<circle className="timer__line" cx="390" cy="390" r="370" style="filter: url(#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center" />*/}
+					{/*<circle className="timer__line" cx="390" cy="390" r="370"*/}
+					{/*style="filter: url(#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"/>*/}
 					{/*</svg>*/}
 
 					<div className="timer__value" xmlns="http://www.w3.org/1999/xhtml">
@@ -82,14 +88,18 @@ class ArtistScreen extends React.PureComponent {
 
 					</div>
 
-					<form className="game__artist" onChange={onAnswer}>
+					<form className="game__artist">
 
 						{quest.options.map((item) => {
 
 							return (
 								<div className="artist" key={`artist-${item.id}`}>
-									<input className="artist__input visually-hidden" type="radio" name="answer"
-												 value={`artist-${item.id}`} id={`answer-${item.id}`}/>
+									<input className="artist__input visually-hidden"
+												 type="radio" name="answer"
+												 value={`artist-${item.id}`}
+												 id={`answer-${item.id}`}
+												 onClick={() => {onAnswer(item)}}
+									/>
 									<label className="artist__name" htmlFor={`answer-${item.id}`}>
 										<div className="artist__picture-wrap">
 											<img className="artist__picture" src={item.imgSrc} alt={item.title}/>

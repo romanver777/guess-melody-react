@@ -1,79 +1,85 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+
+import {ActionCreator} from '../../reducer';
 import WellcomeScreen from '../wellcome-screen/wellcome-screen.jsx';
 import ArtistScreen from '../artist-screen/artist-screen';
 import GenreScreen from '../genre-screen/genre-screen';
-import PropTypes from 'prop-types';
+
+const Type = {
+
+};
 
 class App extends React.PureComponent {
 
-	static getLevel(currentQuest, props, onAnswer) {
+	_getLevel(quest) {
 
-		if (currentQuest < 0) {
+		if (!quest) {
 
-			const {time, mistakes} = props;
+			const {time, maxMistakes, onWelcomeClick} = this.props;
 
 			return <WellcomeScreen
 				time={time}
-				mistakes={mistakes}
-				onClick={onAnswer}
+				mistakes={maxMistakes}
+				onClick={onWelcomeClick}
 			/>
 		}
-		const {quests} = props;
+		const {mistakes, maxMistakes, onUserAnswer} = this.props;
 
-		switch (quests[currentQuest].type) {
+		switch (quest.type) {
 
-			case `artist`: return <ArtistScreen
-															quest={quests[currentQuest]}
-															onAnswer={onAnswer}
-														/>;
-			case `genre`: return <GenreScreen
-														quest={quests[currentQuest]}
-														onAnswer={onAnswer}
-														/>;
+			case `artist`:
+				return <ArtistScreen
+					quest={quest}
+					onAnswer={(answer) => onUserAnswer(answer, quest, mistakes, maxMistakes)}
+				/>;
+			case `genre`:
+				return <GenreScreen
+					quest={quest}
+					onAnswer={(answer) => onUserAnswer(answer, quest, mistakes, maxMistakes)}
+				/>;
 		}
 
 		return null;
 	};
 
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			currentQuest: -1,
-			answers: [],
-		}
-	}
-
 	render() {
 
-		const {quests} = this.props;
-		const {currentQuest} = this.state;
+		const {quests, questNumber} = this.props;
 
-		return App.getLevel(currentQuest, this.props, (e) => {
-
-			const id = e.target ? e.target.id.slice('answer-'.length) : e;
-			const answerArr = this.state.answers;
-
-			if (id) answerArr.push(id);
-
-			this.setState((prevState) => {
-
-				const nextIndex = prevState.currentQuest + 1;
-				const isEnd = nextIndex > quests.length - 1;
-
-				return {
-					currentQuest: !isEnd ? nextIndex : -1,
-					answers: answerArr
-				};
-			});
-		});
+		return this._getLevel(quests[questNumber]);
 	}
 }
 
 App.propTypes = {
 	time: PropTypes.number.isRequired,
 	mistakes: PropTypes.number.isRequired,
-	quests: PropTypes.array.isRequired
+	maxMistakes: PropTypes.number.isRequired,
+	quests: PropTypes.array.isRequired,
+	questNumber: PropTypes.number.isRequired,
+	onUserAnswer: PropTypes.func.isRequired,
+	onWelcomeClick: PropTypes.func.isRequired
 };
 
-export default App;
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+	questNumber: state.questNumber,
+	mistakes: state.mistakes,
+});
+
+
+const mapDispatchToProps = (dispatch) => ({
+
+	onWelcomeClick: () => dispatch(ActionCreator.incrementQuestNumber()),
+
+	onUserAnswer: (answer, quest, mistakes, maxMistakes) => {
+		dispatch(ActionCreator.incrementQuestNumber());
+		dispatch(ActionCreator.incrementMistakes(
+			answer, quest, mistakes, maxMistakes
+		));
+	}
+});
+
+export {App};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
