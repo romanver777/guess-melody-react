@@ -11,7 +11,7 @@ import {reducer} from './reducer';
 const gameSettings = {
   gameTime: 5,
   maxMistakes: 3,
-  numberQuests: 4,
+  numberQuests: 10,
 };
 
 const init = (props) => {
@@ -19,7 +19,6 @@ const init = (props) => {
   const {gameTime, maxMistakes, numberQuests} = gameSettings;
   const quests = getQuests(props, numberQuests);
   const store = createStore(reducer);
-  console.log('----------------',store);
 
   ReactDom.render(
     <Provider store={store}>

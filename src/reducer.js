@@ -1,9 +1,20 @@
 const isArtistAnswerCorrect = (answer, quest) => {
 
+	return +answer.id === quest.answer.id
 };
 
 const isGenreAnswerCorrect = (answer, quest) => {
 
+	if (answer.length !== quest.answer.id.length) return false;
+
+	for (let it of answer) {
+
+		if (quest.answer.id.indexOf(it.toString()) < 0) {
+
+			return false;
+		}
+	}
+	return true;
 };
 
 const ActionCreator = {

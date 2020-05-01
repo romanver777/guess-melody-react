@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AudioPlayer from '../audio-player/audio-player';
+import Mistakes from '../mistakes/mistakes';
 
 class ArtistScreen extends React.PureComponent {
 
@@ -49,7 +50,7 @@ class ArtistScreen extends React.PureComponent {
 	};
 
 	render () {
-		const {quest, onAnswer} = this.props;
+		const {quest, mistakes, maxMistakes, onAnswer} = this.props;
 		const src = quest.options[quest.answer.id].src;
 		const id = quest.options[quest.answer.id].id;
 
@@ -72,11 +73,7 @@ class ArtistScreen extends React.PureComponent {
 						<span className="timer__secs">00</span>
 					</div>
 
-					<div className="game__mistakes">
-						<div className="wrong"></div>
-						<div className="wrong"></div>
-						<div className="wrong"></div>
-					</div>
+					<Mistakes mistakes={mistakes}/>
 				</header>
 
 				<section className="game__screen">

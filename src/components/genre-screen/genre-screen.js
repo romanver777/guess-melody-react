@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AudioPlayer from '../audio-player/audio-player';
+import Mistakes from '../mistakes/mistakes';
 
 class GenreScreen extends React.Component {
 
@@ -66,7 +67,7 @@ class GenreScreen extends React.Component {
 	};
 
 	render () {
-		const {quest, onAnswer} = this.props;
+		const {quest, mistakes, maxMistakes, onAnswer} = this.props;
 
 		return (
 			<section className="game game--genre">
@@ -87,11 +88,8 @@ class GenreScreen extends React.Component {
 						<span className="timer__secs">00</span>
 					</div>
 
-					<div className="game__mistakes">
-						<div className="wrong"></div>
-						<div className="wrong"></div>
-						<div className="wrong"></div>
-					</div>
+
+					<Mistakes mistakes={mistakes}/>
 				</header>
 
 				<section className="game__screen">
