@@ -32,11 +32,15 @@ class App extends React.PureComponent {
 			case `artist`:
 				return <ArtistScreen
 					quest={quest}
+					mistakes={mistakes}
+					maxMistakes={maxMistakes}
 					onAnswer={(answer) => onUserAnswer(answer, quest, mistakes, maxMistakes)}
 				/>;
 			case `genre`:
 				return <GenreScreen
 					quest={quest}
+					mistakes={mistakes}
+					maxMistakes={maxMistakes}
 					onAnswer={(answer) => onUserAnswer(answer, quest, mistakes, maxMistakes)}
 				/>;
 		}
