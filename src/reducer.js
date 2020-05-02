@@ -42,12 +42,26 @@ const ActionCreator = {
 			type: `INCREMENT_MISTAKES`,
 			payload: isCorrect ? 0 : 1,
 		}
-	}
+	},
+	decrementTime: (time) => {
+
+		if (time === 0) {
+
+			return {
+				type: `RESET`,
+			}
+		}
+		return {
+			type: `DECREMENT_TIME`,
+			payload: 1,
+		}
+	},
 };
 
 const initialState = {
 	questNumber: -1,
 	mistakes: 0,
+	time: 300,
 };
 
 const reducer = (state = initialState, action) => {
@@ -60,6 +74,10 @@ const reducer = (state = initialState, action) => {
 
 		case `INCREMENT_MISTAKES`: return Object.assign({}, state, {
 			mistakes: state.mistakes + action.payload,
+		});
+
+		case `DECREMENT_TIME`: return Object.assign({}, state, {
+			time: state.time - action.payload,
 		});
 
 		case `RESET`: return Object.assign({}, initialState);

@@ -25,13 +25,15 @@ class App extends React.PureComponent {
 				onClick={onWelcomeClick}
 			/>
 		}
-		const {mistakes, maxMistakes, onUserAnswer} = this.props;
+		const {time, mistakes, maxMistakes, onTik, onUserAnswer} = this.props;
 
 		switch (quest.type) {
 
 			case `artist`:
 				return <ArtistScreen
 					quest={quest}
+					time={time}
+					onTik={onTik}
 					mistakes={mistakes}
 					maxMistakes={maxMistakes}
 					onAnswer={(answer) => onUserAnswer(answer, quest, mistakes, maxMistakes)}
@@ -39,6 +41,8 @@ class App extends React.PureComponent {
 			case `genre`:
 				return <GenreScreen
 					quest={quest}
+					time={time}
+					onTik={onTik}
 					mistakes={mistakes}
 					maxMistakes={maxMistakes}
 					onAnswer={(answer) => onUserAnswer(answer, quest, mistakes, maxMistakes)}
@@ -62,6 +66,7 @@ App.propTypes = {
 	maxMistakes: PropTypes.number.isRequired,
 	quests: PropTypes.array.isRequired,
 	questNumber: PropTypes.number.isRequired,
+	onTik: PropTypes.func,
 	onUserAnswer: PropTypes.func.isRequired,
 	onWelcomeClick: PropTypes.func.isRequired
 };
@@ -69,6 +74,7 @@ App.propTypes = {
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
 	questNumber: state.questNumber,
 	mistakes: state.mistakes,
+	time: state.time,
 });
 
 
@@ -81,7 +87,9 @@ const mapDispatchToProps = (dispatch) => ({
 		dispatch(ActionCreator.incrementMistakes(
 			answer, quest, mistakes, maxMistakes
 		));
-	}
+	},
+
+	onTik: (time) => dispatch(ActionCreator.decrementTime(time)),
 });
 
 export {App};
