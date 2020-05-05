@@ -16,6 +16,23 @@ const addZero = (time) => {
 	return time;
 };
 
+const getObjStyle = (str) => {
+
+	const styles = str.split(";");
+
+	const svgStyles = styles.reduce((obj, item, i) => {
+
+		const [key, value] = item.split(":");
+		const updatedkey = key.replace(/-([a-z])/ig, s => s.slice(-1).toUpperCase());
+
+		obj[updatedkey] = value;
+
+		return obj;
+	}, {});
+
+	return svgStyles;
+};
+
 class Timer extends React.PureComponent {
 
 	constructor (props) {
@@ -28,13 +45,16 @@ class Timer extends React.PureComponent {
 
 		this.timer = setTimeout(() => {
 
-			this.stopTimer();
-			onTik(this.props.time);
+			onTik(this.props.time, this.props.mistakes, this.props.maxMistakes);
 
 		}, 1000);
 	};
 
-	stopTimer = () => clearInterval(this.timer);
+	stopTimer = () => clearTimeout(this.timer);
+
+	componentWillUnmount () {
+		this.stopTimer();
+	}
 
 	render () {
 
@@ -43,19 +63,28 @@ class Timer extends React.PureComponent {
 		const min = addZero(convertStoreTime(time).min);
 		const sec = addZero(convertStoreTime(time).sec);
 
+		const initTime = 300;
+		const radius = 370;
+		const strokeCircleWidth = Math.round(2 * Math.PI * radius);
+		let currentLinePos = strokeCircleWidth - (strokeCircleWidth * time / initTime);
+
+		const svgStyleStr = `strokeDasharray: ${strokeCircleWidth};strokeDashoffset: ${currentLinePos}`;
+
 		this.startTimer(onTik);
 
 		return (
-			// {/*<svg xmlns="http://www.w3.org/2000/svg" className="timer" viewBox="0 0 780 780">*/}
-			// {/*<circle className="timer__line" cx="390" cy="390" r="370"*/}
-			// {/*style="filter: url(#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"/>*/}
-			// {/*</svg>*/}
+			<React.Fragment>
+				<svg xmlns="http://www.w3.org/2000/svg" className="timer" viewBox="0 0 780 780">
+					<circle className="timer__line" cx="390" cy="390" r="370"
+							style={getObjStyle(svgStyleStr)}/>
+				</svg>
 
-			<div className="timer__value" xmlns="http://www.w3.org/1999/xhtml">
-				<span className="timer__mins">{min}</span>
-				<span className="timer__dots">:</span>
-				<span className="timer__secs">{sec}</span>
-			</div>
+				<div className="timer__value" xmlns="http://www.w3.org/1999/xhtml">
+					<span className="timer__mins">{min}</span>
+					<span className="timer__dots">:</span>
+					<span className="timer__secs">{sec}</span>
+				</div>
+			</React.Fragment>
 		);
 	}
 }

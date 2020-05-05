@@ -36,6 +36,7 @@ const ActionCreator = {
 			return {
 				type: `RESET`,
 			}
+
 		}
 
 		return {
@@ -51,6 +52,7 @@ const ActionCreator = {
 				type: `RESET`,
 			}
 		}
+
 		return {
 			type: `DECREMENT_TIME`,
 			payload: 1,
