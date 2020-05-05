@@ -25,7 +25,12 @@ class GenreScreen extends React.Component {
 		if (this.state.currentPlayer) {
 
 			this.state.currentPlayer.pause();
-			this.state.currentButton.className = classNamePause;
+
+			this.setState((prevState) => ({
+
+					currentButton: prevState.currentButton.className = classNamePause,
+				})
+			);
 
 			if (this.state.currentPlayer === items[0]) {
 
@@ -68,7 +73,7 @@ class GenreScreen extends React.Component {
 	};
 
 	render () {
-		const {quest, time, mistakes, onTik, maxMistakes, onAnswer} = this.props;
+		const {quest, time, mistakes, onTik, onAnswer} = this.props;
 
 		return (
 			<section className="game game--genre">

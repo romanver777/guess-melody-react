@@ -51,9 +51,8 @@ class ArtistScreen extends React.PureComponent {
 	};
 
 	render () {
-		const {quest, time, mistakes, onTik, maxMistakes, onAnswer} = this.props;
+		const {quest, time, mistakes, onTik, onAnswer} = this.props;
 		const src = quest.options[quest.answer.id].src;
-		const id = quest.options[quest.answer.id].id;
 
 		return (
 			<section className="game game--artist">

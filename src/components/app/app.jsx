@@ -7,10 +7,6 @@ import WellcomeScreen from '../wellcome-screen/wellcome-screen.jsx';
 import ArtistScreen from '../artist-screen/artist-screen';
 import GenreScreen from '../genre-screen/genre-screen';
 
-const Type = {
-
-};
-
 class App extends React.PureComponent {
 
 	_getLevel(quest) {
@@ -66,7 +62,7 @@ App.propTypes = {
 	maxMistakes: PropTypes.number.isRequired,
 	quests: PropTypes.array.isRequired,
 	questNumber: PropTypes.number.isRequired,
-	onTik: PropTypes.func,
+	onTik: PropTypes.func.isRequired,
 	onUserAnswer: PropTypes.func.isRequired,
 	onWelcomeClick: PropTypes.func.isRequired
 };

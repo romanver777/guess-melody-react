@@ -7,7 +7,7 @@ const Mistakes = (props) => {
 
 	return (
 		<div className="game__mistakes">
-			{ Array.from( new Array(mistakes), () => <div className="wrong"></div>) }
+			{ Array.from( new Array(mistakes), (v, k) => <div className="wrong" key={k}></div>) }
 		</div>
 	);
 };
